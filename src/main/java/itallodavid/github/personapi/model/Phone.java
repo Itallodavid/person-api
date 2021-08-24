@@ -13,15 +13,12 @@ import java.util.Objects;
 @NoArgsConstructor @AllArgsConstructor
 public class Phone {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Id
+    private String number;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private PhoneType type;
-
-    @Column(nullable = false, unique = true)
-    private String number;
 
     @Override
     public boolean equals(Object o) {
@@ -29,7 +26,7 @@ public class Phone {
         if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
         Phone phone = (Phone) o;
 
-        return Objects.equals(id, phone.id);
+        return Objects.equals(number, phone.number);
     }
 
     @Override
