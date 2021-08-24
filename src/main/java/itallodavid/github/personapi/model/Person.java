@@ -1,16 +1,17 @@
 package itallodavid.github.personapi.model;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
+import org.hibernate.Hibernate;
 import org.hibernate.envers.Audited;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Entity @Audited
-@Getter @Setter
+@Getter @Setter @Builder
+@NoArgsConstructor @AllArgsConstructor
 public class Person {
 
     @Id
@@ -26,5 +27,19 @@ public class Person {
     private LocalDate birthDate;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REMOVE})
-    private List<Phone> phones = new ArrayList<>();
+    private List<Phone> phones;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        Person person = (Person) o;
+
+        return Objects.equals(cpf, person.cpf);
+    }
+
+    @Override
+    public int hashCode() {
+        return 1422108840;
+    }
 }
