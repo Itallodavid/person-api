@@ -37,4 +37,9 @@ public class PersonService {
         Person personToSave = mapper.toEntity(dto);
         return repository.save(personToSave);
     }
+
+    @Transactional(readOnly = true)
+    public Person getPerson(final String cpf) throws PersonNotFoundException {
+        return repository.findById(cpf).orElseThrow(() -> new PersonNotFoundException(cpf));
+    }
 }

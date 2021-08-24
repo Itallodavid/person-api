@@ -1,6 +1,8 @@
 package itallodavid.github.personapi.service;
 
 import itallodavid.github.personapi.dto.PersonDTO;
+import itallodavid.github.personapi.exceptions.PersonAlreadyExistsException;
+import itallodavid.github.personapi.exceptions.PersonNotFoundException;
 import itallodavid.github.personapi.mapper.PersonMapper;
 import itallodavid.github.personapi.model.Person;
 import itallodavid.github.personapi.repository.PersonRepository;
@@ -8,7 +10,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -16,10 +17,12 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
+import java.util.Optional;
 
 import static itallodavid.github.personapi.utils.PersonUtils.*;
-import static itallodavid.github.personapi.utils.PersonUtils.createFakeEntityWithoutId;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.anyString;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -59,5 +62,25 @@ class PersonServiceTest {
         Person savedPerson = service.createPerson(personDTO);
 
         assertEquals(expectedSavedPerson, createFakeEntityWithId());
+    }
+
+    @Test
+    void testGivenDuplicatePersonEntityToCreationThenThrowPersonAlreadyExistsException() {
+       when(repository.findById(anyString())).thenReturn(Optional.of(createFakeEntityWithId()));
+       assertThrows(PersonAlreadyExistsException.class, () -> service.createPerson(createFakeDTOWithId()));
+    }
+
+    @Test
+    void testGivenValidIdThenReturnAPersonEntity(){
+        final String fakeCPF = "999999999";
+        when(repository.findById(anyString())).thenReturn(Optional.of(createFakeEntityWithId()));
+        assertEquals(createFakeEntityWithId(), service.getPerson(fakeCPF));
+    }
+
+    @Test
+    void testGivenInvalidIdThenThrowPersonNotFoundException(){
+        final String fakeCPF = "999999999";
+        when(repository.findById(anyString())).thenReturn(Optional.empty());
+        assertThrows(PersonNotFoundException.class, () -> service.getPerson(fakeCPF));
     }
 }

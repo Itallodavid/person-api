@@ -2,6 +2,7 @@ package itallodavid.github.personapi.controller;
 
 import itallodavid.github.personapi.dto.PersonDTO;
 import itallodavid.github.personapi.exceptions.PersonAlreadyExistsException;
+import itallodavid.github.personapi.exceptions.PersonNotFoundException;
 import itallodavid.github.personapi.model.Person;
 import itallodavid.github.personapi.service.PersonService;
 import lombok.RequiredArgsConstructor;
@@ -29,5 +30,10 @@ public class PersonController {
     @ResponseStatus(HttpStatus.CREATED)
     public Person createPerson(@RequestBody @Valid final PersonDTO dto) throws PersonAlreadyExistsException {
         return service.createPerson(dto);
+    }
+
+    @GetMapping(path = "/{cpf}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public Person getPerson(@PathVariable final String cpf) throws PersonNotFoundException {
+        return service.getPerson(cpf);
     }
 }
