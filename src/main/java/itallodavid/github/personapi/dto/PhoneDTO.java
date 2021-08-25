@@ -13,8 +13,6 @@ import java.io.Serializable;
 @NoArgsConstructor @AllArgsConstructor @EqualsAndHashCode
 public class PhoneDTO implements Serializable {
 
-    private Long id;
-
     @Enumerated(EnumType.STRING)
     private PhoneType type;
 
