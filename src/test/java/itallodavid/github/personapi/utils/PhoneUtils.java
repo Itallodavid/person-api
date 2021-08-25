@@ -6,7 +6,6 @@ import itallodavid.github.personapi.model.Phone;
 
 public class PhoneUtils {
 
-    private static final long PHONE_ID = 1L;
     private static final String PHONE_NUMBER = "11999999999";
     private static final PhoneType PHONE_TYPE = PhoneType.MOBILE;
 
@@ -19,7 +18,6 @@ public class PhoneUtils {
 
     public static Phone createFakeEntity() {
         return Phone.builder()
-            .id(PHONE_ID)
             .number(PHONE_NUMBER)
             .type(PHONE_TYPE)
             .build();
