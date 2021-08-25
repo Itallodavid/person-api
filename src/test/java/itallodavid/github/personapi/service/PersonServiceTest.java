@@ -1,6 +1,7 @@
 package itallodavid.github.personapi.service;
 
 import itallodavid.github.personapi.dto.PersonDTO;
+import itallodavid.github.personapi.dto.PersonUpdateDTO;
 import itallodavid.github.personapi.exceptions.PersonAlreadyExistsException;
 import itallodavid.github.personapi.exceptions.PersonNotFoundException;
 import itallodavid.github.personapi.mapper.PersonMapper;
@@ -82,5 +83,25 @@ class PersonServiceTest {
         final String fakeCPF = "999999999";
         when(repository.findById(anyString())).thenReturn(Optional.empty());
         assertThrows(PersonNotFoundException.class, () -> service.getPerson(fakeCPF));
+    }
+
+    @Test
+    void testGivenValidPersonUpdateDTOThenUpdateAPersonEntity(){
+        final String newFirstName = "Silva";
+
+        PersonUpdateDTO updateDTO = createFakeUpdateDTO();
+        updateDTO.setFirstName(newFirstName);
+
+        Person mapperReturn = createFakeEntityWithoutId();
+        mapperReturn.setFirstName(newFirstName);
+
+        Person expectedPerson = createFakeEntityWithId();
+        expectedPerson.setFirstName(newFirstName);
+
+        when(mapper.toEntity(updateDTO)).thenReturn(mapperReturn);
+        when(repository.findById(CPF_NUMBER)).thenReturn(Optional.of(createFakeEntityWithId()));
+        when(repository.save(expectedPerson)).thenReturn(expectedPerson);
+
+        assertEquals(expectedPerson, service.updatePerson(CPF_NUMBER, updateDTO));
     }
 }

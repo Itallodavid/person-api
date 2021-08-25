@@ -1,6 +1,7 @@
 package itallodavid.github.personapi.service;
 
 import itallodavid.github.personapi.dto.PersonDTO;
+import itallodavid.github.personapi.dto.PersonUpdateDTO;
 import itallodavid.github.personapi.exceptions.PersonAlreadyExistsException;
 import itallodavid.github.personapi.exceptions.PersonNotFoundException;
 import itallodavid.github.personapi.mapper.PersonMapper;
@@ -41,5 +42,13 @@ public class PersonService {
     @Transactional(readOnly = true)
     public Person getPerson(final String cpf) throws PersonNotFoundException {
         return repository.findById(cpf).orElseThrow(() -> new PersonNotFoundException(cpf));
+    }
+
+    @Transactional
+    public Person updatePerson(final String cpf, final PersonUpdateDTO dto) throws PersonNotFoundException {
+        this.getPerson(cpf);
+        Person personToUpdate = mapper.toEntity(dto);
+        personToUpdate.setCpf(cpf);
+        return repository.save(personToUpdate);
     }
 }

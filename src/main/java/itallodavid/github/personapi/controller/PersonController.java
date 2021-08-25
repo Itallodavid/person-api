@@ -1,6 +1,7 @@
 package itallodavid.github.personapi.controller;
 
 import itallodavid.github.personapi.dto.PersonDTO;
+import itallodavid.github.personapi.dto.PersonUpdateDTO;
 import itallodavid.github.personapi.exceptions.PersonAlreadyExistsException;
 import itallodavid.github.personapi.exceptions.PersonNotFoundException;
 import itallodavid.github.personapi.model.Person;
@@ -35,5 +36,12 @@ public class PersonController {
     @GetMapping(path = "/{cpf}", produces = MediaType.APPLICATION_JSON_VALUE)
     public Person getPerson(@PathVariable final String cpf) throws PersonNotFoundException {
         return service.getPerson(cpf);
+    }
+
+    @PutMapping(path = "/{cpf}",
+        consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public Person updatePerson(@PathVariable final String cpf, @RequestBody PersonUpdateDTO dto)
+        throws PersonNotFoundException {
+        return service.updatePerson(cpf, dto);
     }
 }
