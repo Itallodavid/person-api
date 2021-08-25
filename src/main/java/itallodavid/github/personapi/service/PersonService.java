@@ -51,4 +51,11 @@ public class PersonService {
         personToUpdate.setCpf(cpf);
         return repository.save(personToUpdate);
     }
+
+    @Transactional
+    public Person deletePerson(final String cpf) throws PersonNotFoundException {
+        Person person = this.getPerson(cpf);
+        repository.delete(person);
+        return person;
+    }
 }

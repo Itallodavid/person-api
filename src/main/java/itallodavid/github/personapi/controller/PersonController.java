@@ -44,4 +44,9 @@ public class PersonController {
         throws PersonNotFoundException {
         return service.updatePerson(cpf, dto);
     }
+
+    @DeleteMapping(path = "/{cpf}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public Person deletePerson(@PathVariable final String cpf){
+        return service.deletePerson(cpf);
+    }
 }

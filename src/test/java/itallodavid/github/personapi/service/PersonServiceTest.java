@@ -104,4 +104,16 @@ class PersonServiceTest {
 
         assertEquals(expectedPerson, service.updatePerson(CPF_NUMBER, updateDTO));
     }
+
+    @Test
+    void testGivenValidCPFForDeleteAPersonThenReturnPersonDeleted(){
+        when(repository.findById(CPF_NUMBER)).thenReturn(Optional.of(createFakeEntityWithId()));
+        assertEquals(createFakeEntityWithId(), service.deletePerson(CPF_NUMBER));
+    }
+
+    @Test
+    void testGivenInvalidCPFForDeleteAPersonThrowPersonNotFoundException(){
+        when(repository.findById(CPF_NUMBER)).thenReturn(Optional.empty());
+        assertThrows(PersonNotFoundException.class, () -> service.deletePerson(CPF_NUMBER));
+    }
 }
